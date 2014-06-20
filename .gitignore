@@ -1,0 +1,20 @@
+# Visual Studio
+Release
+bin
+obj
+*.ncb
+*.vcproj*
+*.suo
+*.user
+*.sln.cache
+*.manifest
+*.CodeAnalysisLog.xml
+*.lastcodeanalysissucceeded
+_ReSharper.*/
+
+# Xamarin Studio
+*.pidb
+*.userprefs
+
+# Mac OS X
+.DS_Store
