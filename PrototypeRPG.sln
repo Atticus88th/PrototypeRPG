@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrototypeRPG.Mac", "PrototypeRPG.Mac\PrototypeRPG.Mac.csproj", "{0F5536AC-2292-4A78-A9ED-355B81A83365}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrototypeRPG.Traits", "PrototypeRPG.Traits\PrototypeRPG.Traits.csproj", "{A2AE5E2B-744F-4894-84D0-79BD6BCA4386}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -16,6 +18,12 @@ Global
 		{0F5536AC-2292-4A78-A9ED-355B81A83365}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F5536AC-2292-4A78-A9ED-355B81A83365}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F5536AC-2292-4A78-A9ED-355B81A83365}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2AE5E2B-744F-4894-84D0-79BD6BCA4386}.AppStore|Any CPU.ActiveCfg = Release|Any CPU
+		{A2AE5E2B-744F-4894-84D0-79BD6BCA4386}.AppStore|Any CPU.Build.0 = Release|Any CPU
+		{A2AE5E2B-744F-4894-84D0-79BD6BCA4386}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2AE5E2B-744F-4894-84D0-79BD6BCA4386}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2AE5E2B-744F-4894-84D0-79BD6BCA4386}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2AE5E2B-744F-4894-84D0-79BD6BCA4386}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = PrototypeRPG.Mac\PrototypeRPG.Mac.csproj
