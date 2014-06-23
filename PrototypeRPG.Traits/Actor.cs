@@ -24,7 +24,7 @@ namespace PrototypeRPG
 		}
 		public int ActorID;
 
-		List<ITrait> traits = new List<ITrait>();
+		List<object> traits = new List<object>();
 
 		public Actor() { }
 
@@ -59,11 +59,9 @@ namespace PrototypeRPG
 			return traits.Exists(t => t is T);
 		}
 
-		public IEnumerable<T> TraitsImplementing<T>()
+		public IEnumerable<T> TraitsImplementing<T>() where T : class
 		{
-			return Assembly.GetExecutingAssembly().GetTypes()
-				.Where(t => t.GetInterfaces().Contains(typeof(T)) && t.GetConstructor(Type.EmptyTypes) != null)
-				.Select(t => (T)Activator.CreateInstance(t));
+			return traits.Select(t => t as T).Where(t => t != null);
 		}
 	}
 }

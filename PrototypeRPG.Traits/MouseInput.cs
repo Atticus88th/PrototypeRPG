@@ -28,19 +28,8 @@ namespace PrototypeRPG.Traits
 			var boundingBox = renderer.BoundingBox;
 
 			if (leftButton && boundingBox.Contains(mousePosition))
-			{
-				Console.WriteLine("Trying to notify OnSelect()");
-
-				var wow = self.TraitsImplementing<IMouseSelectable>();
-				Console.WriteLine(wow.Count()); // Always 0. :(
-
-				// TODO: fix actor.TraitsImplementing not finding any traits
 				foreach (var notify in self.TraitsImplementing<IMouseSelectable>())
-				{
-					Console.WriteLine("IMouseSelectable found for {0}.", notify.GetType().Name);
 					notify.OnSelect(self);
-				}
-			}
 
 			oldState = currentState;
 		}

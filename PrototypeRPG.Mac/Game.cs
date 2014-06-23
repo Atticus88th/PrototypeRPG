@@ -38,13 +38,34 @@ namespace PrototypeRPG
 			return ret;
 		}
 
+		Actor CreateSecondTestActor()
+		{
+			var image = Content.Load<Texture2D>("logo");
+
+			var ret = new Actor();
+
+			var render = new Renderable(image);
+			var health = new Health(100);
+			var mouse = new MouseInput();
+
+			render.RenderLocation = new Vector2(180, 90);
+
+			ret.AddTraits(render, health, mouse);
+
+			ret.ActorID = actors.Count + 1;
+
+			return ret;
+		}
+
 		protected override void Initialize()
 		{
 			base.Initialize();
 
-			var tester = CreateTestActor();
+			var test1 = CreateTestActor();
+			var test2 = CreateSecondTestActor();
 
-			actors.Add(tester);
+			actors.Add(test1);
+			actors.Add(test2);
 		}
 
 		protected override void LoadContent()
@@ -67,17 +88,8 @@ namespace PrototypeRPG
 			spriteBatch.Begin();
 
 			foreach (var actor in actors)
-			{
-				var render = actor.TraitOrDefault<Renderable>();
-				if (render == null)
-					continue;
-
-				render.TickRender(actor, spriteBatch);
-
-				// TODO: Make this code work in the same way as ITick
-//				foreach (var update in actor.TraitsImplementing<ITickRender>())
-//					update.UpdateRender(spriteBatch, actor);
-			}
+				foreach (var tick in actor.TraitsImplementing<ITickRender>())
+					tick.TickRender(actor, spriteBatch);
 
 			spriteBatch.End();
 			base.Draw(gameTime);
