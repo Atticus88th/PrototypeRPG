@@ -9,25 +9,29 @@ namespace PrototypeRPG
 {
 	public class Actor
 	{
+		bool isDead;
 		public bool IsDead
 		{
 			get
 			{
+				// HACK!
 				var health = this.TraitOrDefault<Health>();
 				if (health == null)
 					return true;
 
-				return health.CurrentHP <= 0;
+				return health.CurrentHP <= 0 || isDead;
 			}
 
-			internal set { }
+			internal set { isDead = true; }
 		}
 		public int ActorID;
+
 		public World World;
+		public Player Owner;
 
 		List<object> traits = new List<object>();
 
-		public Actor(World world) { World = world; }
+		public Actor() { }
 
 		public void Kill()
 		{

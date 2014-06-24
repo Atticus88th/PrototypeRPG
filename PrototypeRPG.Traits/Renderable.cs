@@ -7,10 +7,6 @@ namespace PrototypeRPG.Traits
 {
 	public class Renderable : ITrait, ITickRender
 	{
-		// TODO: Separate render location from (need to add!)
-		//			logical location
-		public Vector2 RenderLocation = Vector2.Zero;
-
 		public Rectangle BoundingBox;
 
 		Texture2D texture;
@@ -26,10 +22,19 @@ namespace PrototypeRPG.Traits
 
 		public void TickRender(Actor self, SpriteBatch spriteBatch)
 		{
-			if (texture == null)
+			if (self.IsDead)
 				return;
 
-			spriteBatch.Draw(texture, RenderLocation, Color.White);
+			if (texture == null)
+				throw new ArgumentNullException("No texture provided for Actor{0} to render!".F(self.ActorID));
+
+			var position = self.TraitOrDefault<Positionable>();
+
+			if (position == null)
+				throw new ArgumentNullException("No position trait for Actor{0}!".F(self.ActorID));
+
+			spriteBatch.Draw(texture, position.Position, Color.White);
+			spriteBatch.Draw(texture, BoundingBox, Color.Red);
 		}
 	}
 }

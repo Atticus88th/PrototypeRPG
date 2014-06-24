@@ -31,14 +31,10 @@ namespace PrototypeRPG.Traits
 
 		void DoVisualMovement(Actor self, Vector2 vector2)
 		{
-			var renderer = self.TraitOrDefault<Renderable>();
+			var position = self.TraitOrDefault<Positionable>();
 
-			var newLocation = renderer.RenderLocation += vector2;
-			renderer.BoundingBox = new Rectangle
-				(
-					(int)newLocation.X, (int)newLocation.Y,
-					renderer.BoundingBox.Width, renderer.BoundingBox.Height
-				);
+			if (position != null)
+				position.Position += vector2;
 		}
 
 		public void Tick(Actor self)

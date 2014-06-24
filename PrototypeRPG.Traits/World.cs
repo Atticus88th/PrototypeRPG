@@ -10,11 +10,12 @@ namespace PrototypeRPG.Traits
 {
 	public class World
 	{
-		public const int TickTimestep = 40;
-
 		public SpriteBatch SpriteBatch { get; private set; }
 		public List<Actor> Actors = new List<Actor>();
-		public Actor PlayerActor;
+		public Player WorldPlayer;
+		public Player HumanPlayer;
+
+		public Actor WorldActor;
 
 		public int TotalTickCount { get { return TickCount + TickRenderCount; } }
 		public int TickCount { get; private set; }
@@ -27,6 +28,10 @@ namespace PrototypeRPG.Traits
 		{
 			SpriteBatch = spriteBatch;
 			this.content = content;
+
+			WorldPlayer = new Player();
+			WorldActor = new Actor();
+			WorldPlayer.PlayerActor = WorldActor;
 
 			SetupWorld();
 		}
@@ -49,12 +54,11 @@ namespace PrototypeRPG.Traits
 					trait.TickRender(actor, SpriteBatch);
 		}
 	
-		public Actor CreateActor(params ITrait[] traits)
+		public Actor CreateActor()
 		{
-			var newActor = new Actor(this);
-
-			foreach (var trait in traits)
-				newActor.AddTrait(trait);
+			var newActor = new Actor();
+			newActor.World = this;
+			newActor.Owner = HumanPlayer;
 
 			Actors.Add(newActor);
 
@@ -69,18 +73,23 @@ namespace PrototypeRPG.Traits
 
 		public Actor CreateTestActor()
 		{
-			var newActor = new Actor(this);
+			var newActor = new Actor();
+			newActor.World = this;
+			newActor.Owner = HumanPlayer;
 
 			var health = new Health(100);
 
+			var position = new Positionable(newActor);
+			var vx = random.Next(0, 500);
+			var vy = random.Next(0, 275);
+			position.Position = new Vector2(vx, vy);
+
 			var renderable = new Renderable(content.Load<Texture2D>("logo"));
-			var vx = random.Next(0, 200);
-			var vy = random.Next(0, 200);
-			renderable.RenderLocation = new Vector2(vx, vy);
 
 			var keymovement = new KeyboardMovement();
 
 			newActor.AddTrait(health);
+			newActor.AddTrait(position);
 			newActor.AddTrait(renderable);
 			newActor.AddTrait(keymovement);
 
@@ -89,14 +98,20 @@ namespace PrototypeRPG.Traits
 
 		void SetupWorld()
 		{
-			PlayerActor = new Actor(this);
+			HumanPlayer = new Player();
+			var pa = HumanPlayer.PlayerActor;
+			pa = new Actor();
+			pa.World = this;
+
+			HumanPlayer.Diplomacies[WorldPlayer] = Diplomacy.Neutral;
+
 			var keyInput = new KeyboardWorldInteraction(this);
 			var mouseInput = new MouseWorldInteraction();
 
-			PlayerActor.AddTrait(keyInput);
-			PlayerActor.AddTrait(mouseInput);
+			pa.AddTrait(keyInput);
+			pa.AddTrait(mouseInput);
 
-			Actors.Add(PlayerActor);
+			Actors.Add(pa);
 
 			for (var i = 0; i < 3; i++)
 				Actors.Add(CreateTestActor());

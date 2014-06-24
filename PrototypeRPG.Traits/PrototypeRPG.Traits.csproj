@@ -42,9 +42,13 @@
     <Compile Include="Player\KeyboardWorldInteraction.cs" />
     <Compile Include="KeyboardMovement.cs" />
     <Compile Include="Player\MouseWorldInteraction.cs" />
+    <Compile Include="World\Player.cs" />
+    <Compile Include="Positionable.cs" />
+    <Compile Include="Exts.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Player\" />
+    <Folder Include="World\" />
   </ItemGroup>
 </Project>
