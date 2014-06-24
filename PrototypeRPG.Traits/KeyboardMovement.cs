@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace PrototypeRPG.Traits
 {
-	public class KeyboardInput : ITrait, ITick
+	public class KeyboardMovement : ITrait, ITick
 	{
 		public Keys Up = Keys.W;
 		public Keys Down = Keys.S;
@@ -15,7 +15,7 @@ namespace PrototypeRPG.Traits
 		KeyboardState oldState;
 		KeyboardState currentState;
 
-		public KeyboardInput() { }
+		public KeyboardMovement() { }
 
 		public Keys[] PollForInput()
 		{

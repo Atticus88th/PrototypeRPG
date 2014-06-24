@@ -23,20 +23,15 @@ namespace PrototypeRPG
 			internal set { }
 		}
 		public int ActorID;
+		public World World;
 
 		List<object> traits = new List<object>();
 
-		public Actor() { }
+		public Actor(World world) { World = world; }
 
 		public void Kill()
 		{
 			IsDead = true;
-		}
-
-		public void AddTraits(params ITrait[] traits)
-		{
-			foreach (var trait in traits)
-				AddTrait(trait);
 		}
 
 		public void AddTrait(ITrait trait)

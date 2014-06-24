@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace PrototypeRPG.Traits
 {
-	public class MouseInput : ITrait, ITick
+	public class MouseWorldInteraction : ITrait, ITick
 	{
 		MouseState oldState;
 		MouseState currentState;
@@ -15,21 +13,17 @@ namespace PrototypeRPG.Traits
 		bool leftButton { get { return currentState.LeftButton == ButtonState.Pressed; } }
 		bool rightButton { get { return currentState.RightButton == ButtonState.Pressed; } }
 
-		public MouseInput() { }
+		public MouseWorldInteraction() { }
 
 		public void Tick(Actor self)
 		{
 			currentState = Mouse.GetState();
 
-			var renderer = self.TraitOrDefault<Renderable>();
-			if (renderer == null)
-				return;
+			var actorAtMouse = self.World.GetActorAtLocation(mousePosition);
 
-			var boundingBox = renderer.BoundingBox;
-
-			if (leftButton && boundingBox.Contains(mousePosition))
-				foreach (var notify in self.TraitsImplementing<IMouseSelectable>())
-					notify.OnSelect(self);
+			if (leftButton && actorAtMouse != null)
+				foreach (var notify in actorAtMouse.TraitsImplementing<IMouseSelectable>())
+					notify.OnSelect(actorAtMouse);
 
 			oldState = currentState;
 		}

@@ -10,4 +10,3 @@ namespace PrototypeRPG.Traits
 
 	public interface IMouseSelectable { void OnSelect(Actor self); }
 }
-
