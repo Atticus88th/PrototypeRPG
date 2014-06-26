@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PrototypeRPG.Traits;
@@ -16,7 +17,7 @@ namespace PrototypeRPG
 		public Game()
 		{
 			graphics = new GraphicsDeviceManager(this);
-			Content.RootDirectory = "Assets";
+			Content.RootDirectory = "../../../../../../Assets";
 			IsMouseVisible = true;
 			graphics.IsFullScreen = false;
 
@@ -33,7 +34,7 @@ namespace PrototypeRPG
 		protected override void LoadContent()
 		{
 			spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
-			world = new World(spriteBatch, Content);
+			world = new World(spriteBatch, Content, graphics);
 		}
 
 		protected override void Update(GameTime gameTime)

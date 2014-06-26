@@ -82,9 +82,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Assets\logo.png" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\PrototypeRPG.Traits\PrototypeRPG.Traits.csproj">

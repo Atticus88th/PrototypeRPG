@@ -38,13 +38,14 @@
     <Compile Include="Renderable.cs" />
     <Compile Include="Actor.cs" />
     <Compile Include="TraitInterfaces.cs" />
-    <Compile Include="World.cs" />
     <Compile Include="Player\KeyboardWorldInteraction.cs" />
     <Compile Include="KeyboardMovement.cs" />
     <Compile Include="Player\MouseWorldInteraction.cs" />
     <Compile Include="World\Player.cs" />
     <Compile Include="Positionable.cs" />
     <Compile Include="Exts.cs" />
+    <Compile Include="World\Tile.cs" />
+    <Compile Include="World.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
