@@ -14,15 +14,7 @@ namespace PrototypeRPG.Traits
 			{
 				var renderer = self.TraitOrDefault<Renderable>();
 				if (renderer != null)
-				{
-					var bb = renderer.BoundingBox;
-					renderer.BoundingBox = new Rectangle
-						(
-							(int)value.X,
-							(int)value.Y,
-							bb.Width, bb.Height
-						);
-				}
+					renderer.UpdateBoundingBox((int)value.X, (int)value.Y);
 
 				position = value;
 			}

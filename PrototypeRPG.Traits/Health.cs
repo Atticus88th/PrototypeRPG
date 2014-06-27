@@ -18,7 +18,7 @@ namespace PrototypeRPG.Traits
 			if (self.IsDead)
 				return;
 
-			InflictDamage(self, MaxHP);
+			InflictDamage(self, MaxHP / 4);
 		}
 
 		public void InflictDamage(Actor self, int damage)

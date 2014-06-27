@@ -68,14 +68,28 @@ namespace PrototypeRPG.Traits
 				{
 					var tile = tiles2D[x,y];
 					var destRect = new Rectangle(x * TileSize, y * TileSize, TileSize, TileSize);
-					var sourceRect = GetSourceRectangle(worldTileSheet, tile.TileType, TileSize);
+					var sourceRect = GetSourceRectangleSquare(worldTileSheet, tile.TileType, TileSize, 0);
 
 					tile.Render(worldTileSheet, destRect, sourceRect, SpriteBatch);
 				}
 
 			foreach (var actor in Actors.ToList())
+			{
+				var render = actor.TraitOrDefault<Renderable>();
+				if (render == null)
+					continue;
+
+				var position = actor.TraitOrDefault<Positionable>();
+				if (position == null)
+					throw new NullReferenceException("No position for Actor{0} in World.TickRender()".F(actor.ActorID));
+
 				foreach (var trait in actor.TraitsImplementing<ITickRender>())
-					trait.TickRender(actor, SpriteBatch);
+				{
+					var sourceRect = GetSourceRectangle(render.Texture, 0, 16, 24, 0);
+					var destRect = new Rectangle((int)position.Position.X, (int)position.Position.Y, sourceRect.Width, sourceRect.Height);
+					trait.TickRender(actor, destRect, sourceRect, SpriteBatch);
+				}
+			}
 		}
 	
 		public Actor CreateActor()
@@ -92,18 +106,29 @@ namespace PrototypeRPG.Traits
 		public Actor GetActorAtLocation(Point point)
 		{
 			return Actors.Where(a => a.HasTrait<Renderable>() &&
-				a.Trait<Renderable>().BoundingBox.Contains(point)).FirstOrDefault();
+				a.Trait<Renderable>().Boundingbox.Contains(point)).FirstOrDefault();
 		}
 
-		public Rectangle GetSourceRectangle(Texture2D tileset, int tileIndex, int tileSize)
+		public Rectangle GetSourceRectangleSquare(Texture2D texture, int tileIndex, int tileSize, int tileBorder)
 		{
-			var borderSize = 1;
-			var paddedTileSize = tileSize + borderSize;
-			var tilesPerRow = tileset.Width / paddedTileSize;
+			var paddedTileSize = tileSize + tileBorder;
+			var tilesPerRow = texture.Width / paddedTileSize;
 			var x = paddedTileSize * (tileIndex % tilesPerRow);
 			var y = paddedTileSize * (tileIndex / tilesPerRow);
 
 			return new Rectangle(x, y, tileSize, tileSize);
+		}
+
+		public Rectangle GetSourceRectangle(Texture2D texture, int spriteIndex, int spriteWidth, int spriteHeight, int spriteBorder)
+		{
+			var paddedSpriteW = spriteWidth + spriteBorder;
+			var paddedSpriteH = spriteHeight + spriteBorder;
+			var spritesPerRow = texture.Width / paddedSpriteW;
+			var spritesPerColumn = texture.Height / paddedSpriteH;
+			var x = paddedSpriteW * (spriteWidth % spritesPerRow);
+			var y = paddedSpriteH * (spriteHeight % spritesPerColumn);
+
+			return new Rectangle(x, y, spriteWidth, spriteHeight);
 		}
 
 		public Actor CreateTestActor()
@@ -115,11 +140,16 @@ namespace PrototypeRPG.Traits
 			var health = new Health(100);
 
 			var position = new Positionable(newActor);
-			var vx = random.Next(0, 500);
-			var vy = random.Next(0, 275);
+			var vx = random.Next(16, WindowSize - 17);
+			var vy = random.Next(24, WindowSize - 25);
 			position.Position = new Vector2(vx, vy);
 
-			var renderable = new Renderable(content.Load<Texture2D>("logo"));
+			var texture = content.Load<Texture2D>("link");
+
+			// BUG: sprite index picking doesn't work
+			var sourceRect = GetSourceRectangle(texture, 20, 16, 24, 0);
+			var destRect = new Rectangle((int)position.Position.X, (int)position.Position.Y, sourceRect.Width, sourceRect.Height);
+			var renderable = new Renderable(texture, destRect, sourceRect);
 
 			var keymovement = new KeyboardMovement();
 
@@ -148,8 +178,7 @@ namespace PrototypeRPG.Traits
 
 			Actors.Add(pa);
 
-			for (var i = 0; i < 3; i++)
-				Actors.Add(CreateTestActor());
+			Actors.Add(CreateTestActor());
 
 			CreateTiles();
 		}
@@ -164,7 +193,7 @@ namespace PrototypeRPG.Traits
 				for (var y = 0; y < tiles2D.GetLength(1); y++)
 				{
 					var typeNum = random.Next(0, 30);
-					sourceRect = GetSourceRectangle(worldTileSheet, typeNum, TileSize);
+					sourceRect = GetSourceRectangleSquare(worldTileSheet, typeNum, TileSize, 0);
 					destRect = new Rectangle(x * TileSize, y * TileSize, TileSize, TileSize);
 
 					tiles2D[x,y] = new Tile(typeNum);
