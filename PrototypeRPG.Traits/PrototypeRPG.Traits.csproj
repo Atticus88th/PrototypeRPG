@@ -46,6 +46,7 @@
     <Compile Include="Exts.cs" />
     <Compile Include="World\Tile.cs" />
     <Compile Include="World.cs" />
+    <Compile Include="Map.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

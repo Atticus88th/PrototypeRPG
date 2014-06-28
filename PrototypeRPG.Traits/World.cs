@@ -10,10 +10,6 @@ namespace PrototypeRPG.Traits
 {
 	public class World
 	{
-		const int TileSize = 16;
-		const int TilesOnWindow = 40;
-		const int WindowSize = TileSize * TilesOnWindow;
-
 		public SpriteBatch SpriteBatch { get; private set; }
 		public List<Actor> Actors = new List<Actor>();
 		public readonly Player WorldPlayer;
@@ -24,12 +20,13 @@ namespace PrototypeRPG.Traits
 		public int TickCount { get; private set; }
 		public int TickRenderCount { get; private set; }
 
-		Tile[ , ] tiles2D = new Tile[TilesOnWindow,TilesOnWindow];
-
 		readonly ContentManager content;
 		readonly GraphicsDevice graphics;
 		readonly Texture2D worldTileSheet;
 		Random random = new Random();
+		Map map;
+
+		int windowSize;
 
 		public World(SpriteBatch spriteBatch, ContentManager content, GraphicsDeviceManager gdm)
 		{
@@ -37,10 +34,15 @@ namespace PrototypeRPG.Traits
 			this.content = content;
 			this.graphics = gdm.GraphicsDevice;
 
-			gdm.PreferredBackBufferHeight = WindowSize;
-			gdm.PreferredBackBufferWidth = WindowSize;
+			map = new Map(this);
+			map.TilesInMapSquare = 40;
+			map.TileSize = 16;
+			map.MapTileset = content.Load<Texture2D>("lttp");
 
-			worldTileSheet = content.Load<Texture2D>("lttp");
+			windowSize = map.TilesInMapSquare * map.TileSize;
+
+			gdm.PreferredBackBufferHeight = windowSize;
+			gdm.PreferredBackBufferWidth = windowSize;
 
 			WorldPlayer = new Player();
 			WorldActor = new Actor();
@@ -63,15 +65,7 @@ namespace PrototypeRPG.Traits
 		{
 			TickRenderCount++;
 
-			for (var x = 0; x < tiles2D.GetLength(0); x++)
-				for (var y = 0; y < tiles2D.GetLength(1); y++)
-				{
-					var tile = tiles2D[x,y];
-					var destRect = new Rectangle(x * TileSize, y * TileSize, TileSize, TileSize);
-					var sourceRect = GetSourceRectangleSquare(worldTileSheet, tile.TileType, TileSize, 0);
-
-					tile.Render(worldTileSheet, destRect, sourceRect, SpriteBatch);
-				}
+			map.DrawTiles();
 
 			foreach (var actor in Actors.ToList())
 			{
@@ -81,7 +75,7 @@ namespace PrototypeRPG.Traits
 
 				var position = actor.TraitOrDefault<Positionable>();
 				if (position == null)
-					throw new NullReferenceException("No position for Actor{0} in World.TickRender()".F(actor.ActorID));
+					continue;
 
 				foreach (var trait in actor.TraitsImplementing<ITickRender>())
 				{
@@ -125,8 +119,8 @@ namespace PrototypeRPG.Traits
 			var paddedSpriteH = spriteHeight + spriteBorder;
 			var spritesPerRow = texture.Width / paddedSpriteW;
 			var spritesPerColumn = texture.Height / paddedSpriteH;
-			var x = paddedSpriteW * (spriteWidth % spritesPerRow);
-			var y = paddedSpriteH * (spriteHeight % spritesPerColumn);
+			var x = paddedSpriteW * (spriteIndex % spritesPerRow);
+			var y = paddedSpriteH * (spriteIndex % spritesPerColumn);
 
 			return new Rectangle(x, y, spriteWidth, spriteHeight);
 		}
@@ -140,8 +134,8 @@ namespace PrototypeRPG.Traits
 			var health = new Health(100);
 
 			var position = new Positionable(newActor);
-			var vx = random.Next(16, WindowSize - 17);
-			var vy = random.Next(24, WindowSize - 25);
+			var vx = random.Next(16, windowSize - 17);
+			var vy = random.Next(24, windowSize - 25);
 			position.Position = new Vector2(vx, vy);
 
 			var texture = content.Load<Texture2D>("link");
@@ -151,12 +145,12 @@ namespace PrototypeRPG.Traits
 			var destRect = new Rectangle((int)position.Position.X, (int)position.Position.Y, sourceRect.Width, sourceRect.Height);
 			var renderable = new Renderable(texture, destRect, sourceRect);
 
-			var keymovement = new KeyboardMovement();
+			var keyMove = new KeyboardMovement();
 
 			newActor.AddTrait(health);
 			newActor.AddTrait(position);
 			newActor.AddTrait(renderable);
-			newActor.AddTrait(keymovement);
+			newActor.AddTrait(keyMove);
 
 			return newActor;
 		}
@@ -180,25 +174,7 @@ namespace PrototypeRPG.Traits
 
 			Actors.Add(CreateTestActor());
 
-			CreateTiles();
-		}
-
-		void CreateTiles()
-		{
-			var destRect = new Rectangle();
-			var sourceRect = new Rectangle();
-
-			for (var x = 0; x < tiles2D.GetLength(0); x++)
-			{
-				for (var y = 0; y < tiles2D.GetLength(1); y++)
-				{
-					var typeNum = random.Next(0, 30);
-					sourceRect = GetSourceRectangleSquare(worldTileSheet, typeNum, TileSize, 0);
-					destRect = new Rectangle(x * TileSize, y * TileSize, TileSize, TileSize);
-
-					tiles2D[x,y] = new Tile(typeNum);
-				}
-			}
+			map.CreateMapTiles();
 		}
 	}
 }
