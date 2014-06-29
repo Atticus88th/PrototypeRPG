@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
@@ -20,10 +21,12 @@ namespace PrototypeRPG.Traits
 		public int TickCount { get; private set; }
 		public int TickRenderCount { get; private set; }
 
+		// Be careful with this, it shouldn't exist til after everything here is done
+		public Map Map;
+
 		readonly ContentManager content;
 		readonly GraphicsDevice graphics;
 		Random random = new Random();
-		Map map;
 
 		int windowSize;
 
@@ -33,12 +36,10 @@ namespace PrototypeRPG.Traits
 			this.content = content;
 			this.graphics = gdm.GraphicsDevice;
 
-			map = new Map(this);
-			map.TilesInMapSquare = 40;
-			map.TileSize = 16;
-			map.MapTileset = content.Load<Texture2D>("lttp");
+			Map = new Map(this, 40, 16);
+			Map.MapTileset = content.Load<Texture2D>("lttp");
 
-			windowSize = map.TilesInMapSquare * map.TileSize;
+			windowSize = Map.TilesInMapSquare * Map.TileSize;
 
 			gdm.PreferredBackBufferHeight = windowSize;
 			gdm.PreferredBackBufferWidth = windowSize;
@@ -64,7 +65,7 @@ namespace PrototypeRPG.Traits
 		{
 			TickRenderCount++;
 
-			map.DrawTiles();
+			Map.DrawTiles();
 
 			foreach (var actor in Actors.ToList())
 			{
@@ -196,7 +197,8 @@ namespace PrototypeRPG.Traits
 			for (var i = 0; i < 32; i++)
 				Actors.Add(CreateActorSpriteIndex(i));
 
-			map.CreateMapTiles();
+			Map.CreateMapTiles();
+//			map.LoadTilesFromFile(Path.Combine(content.RootDirectory, "map.txt"));
 		}
 	}
 }

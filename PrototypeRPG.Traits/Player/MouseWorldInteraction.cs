@@ -20,6 +20,7 @@ namespace PrototypeRPG.Traits
 		{
 			currentState = Mouse.GetState();
 
+			// TODO: This allows "dragging", force single click (with possible time delay?)
 			if (!newState)
 				return;
 
