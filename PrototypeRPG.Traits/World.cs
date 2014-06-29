@@ -44,6 +44,11 @@ namespace PrototypeRPG.Traits
 			gdm.PreferredBackBufferHeight = windowSize;
 			gdm.PreferredBackBufferWidth = windowSize;
 
+			// Workaround for Windows MonoGame implementation
+			var h = gdm.GraphicsDevice.PresentationParameters.BackBufferHeight = gdm.PreferredBackBufferHeight;
+			var w = gdm.GraphicsDevice.PresentationParameters.BackBufferWidth = gdm.PreferredBackBufferWidth;
+			gdm.ApplyChanges();
+
 			WorldPlayer = new Player();
 			WorldActor = new Actor();
 			WorldPlayer.PlayerActor = WorldActor;

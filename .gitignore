@@ -11,6 +11,7 @@ obj
 *.CodeAnalysisLog.xml
 *.lastcodeanalysissucceeded
 _ReSharper.*/
+UpgradeLog.*
 
 # Xamarin Studio
 *.pidb
