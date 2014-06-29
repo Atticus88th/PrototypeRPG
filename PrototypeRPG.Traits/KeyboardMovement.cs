@@ -12,19 +12,17 @@ namespace PrototypeRPG.Traits
 		public Keys Left = Keys.A;
 		public Keys Right = Keys.D;
 
+		public int MovementSpeed { get; private set; }
+
 		KeyboardState oldState;
 		KeyboardState currentState;
+		bool newState { get { return currentState != oldState; } }
 
-		public KeyboardMovement() { }
+		public KeyboardMovement(int moveSpeed) { MovementSpeed = moveSpeed; }
 
 		public Keys[] PollForInput()
 		{
 			currentState = Keyboard.GetState();
-
-			if (currentState == oldState)
-				return null;
-
-			oldState = currentState;
 
 			return currentState.GetPressedKeys();
 		}
@@ -44,16 +42,16 @@ namespace PrototypeRPG.Traits
 				return;
 
 			if (keys.Contains(Up))
-				DoVisualMovement(self, new Vector2(0, -4));
+				DoVisualMovement(self, new Vector2(0, -MovementSpeed));
 
 			if (keys.Contains(Down))
-				DoVisualMovement(self, new Vector2(0, 4));
+				DoVisualMovement(self, new Vector2(0, MovementSpeed));
 
 			if (keys.Contains(Left))
-				DoVisualMovement(self, new Vector2(-4, 0));
+				DoVisualMovement(self, new Vector2(-MovementSpeed, 0));
 
 			if (keys.Contains(Right))
-				DoVisualMovement(self, new Vector2(4, 0));
+				DoVisualMovement(self, new Vector2(MovementSpeed, 0));
 
 			oldState = currentState;
 		}

@@ -133,17 +133,16 @@ namespace PrototypeRPG.Traits
 			var health = new Health(100);
 
 			var position = new Positionable(newActor);
-			var vx = random.Next(16, windowSize - 17);
-			var vy = random.Next(24, windowSize - 25);
-			position.Position = new Vector2(vx, vy);
+			var rx = random.Next(16, windowSize - 17).TileSubdivision(16);
+			var ry = random.Next(24, windowSize - 25).TileSubdivision(16);
+			position.Position = new Vector2(rx, ry);
 
 			var texture = content.Load<Texture2D>("link");
 
 			var sourceRect = GetSourceRectangle(texture, 0, 16, 24, 0);
 			var bounding = new Rectangle((int)position.Position.X, (int)position.Position.Y, sourceRect.Width, sourceRect.Height);
 			var renderable = new Renderable(texture, bounding, sourceRect);
-
-			var keyMove = new KeyboardMovement();
+			var keyMove = new KeyboardMovement(4);
 
 			newActor.AddTrait(health);
 			newActor.AddTrait(position);
@@ -169,10 +168,12 @@ namespace PrototypeRPG.Traits
 			var sourceRect = GetSourceRectangle(texture, index, 16, 24, 0);
 			var bounding = new Rectangle((int)position.Position.X, (int)position.Position.Y, sourceRect.Width, sourceRect.Height);
 			var renderable = new Renderable(texture, bounding, sourceRect);
+			var keyMove = new KeyboardMovement(4);
 
 			newActor.AddTrait(health);
 			newActor.AddTrait(position);
 			newActor.AddTrait(renderable);
+			newActor.AddTrait(keyMove);
 
 			return newActor;
 		}
@@ -198,7 +199,8 @@ namespace PrototypeRPG.Traits
 				Actors.Add(CreateActorSpriteIndex(i));
 
 			Map.CreateMapTiles();
-//			map.LoadTilesFromFile(Path.Combine(content.RootDirectory, "map.txt"));
+//			Map.LoadTilesFromFile(Path.Combine(content.RootDirectory, "map.txt"));
+//			Map.LoadTilesFromArrays();
 		}
 	}
 }

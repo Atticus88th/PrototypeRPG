@@ -38,12 +38,27 @@ namespace PrototypeRPG.Traits
 				}
 		}
 
-//		public void LoadTilesFromFile(string filename)
-//		{
-//			var fullText = File.ReadAllLines(filename);
-//
-//			var output = new int[fullText.Length][];
-//
+		public void LoadTilesFromArrays()
+		{
+			var loaded = new int[8][];
+			loaded[0] = new int[8] { 0, 1, 1, 1, 1, 1, 1, 1 };
+			loaded[1] = new int[8] { 8, 9, 9, 9, 9, 9, 9, 9 };
+			loaded[2] = new int[8] { 16, 17, 18, 19, 20, 20, 22, 23 };
+			loaded[3] = new int[8] { 24, 17, 26, 27, 28, 28, 30, 31 };
+			loaded[4] = new int[8] { 32, 17, 34, 35, 36, 37, 38, 39 };
+			loaded[5] = new int[8] { 40, 17, 42, 43, 44, 45, 43, 47 };
+			loaded[6] = new int[8] { 48, 17, 50, 51, 52, 53, 54, 55 };
+			loaded[7] = new int[8] { 56, 17, 58, 59, 60, 61, 62, 63 };
+
+			for (var aY = 0; aY < loaded.Length; aY++)
+				for (var aX = 0; aX < loaded[aY].Length; aX++)
+					tiles2D[aX, aY] = new Tile(loaded[aY][aX]);
+		}
+
+		public void LoadTilesFromFile(string filename)
+		{
+			var fullText = File.ReadAllLines(filename);
+
 //			foreach (var fullLine in fullText)
 //			{
 //				var lineAsIntArray = fullLine.ToIntArray(',');
@@ -54,7 +69,7 @@ namespace PrototypeRPG.Traits
 //					// No idea what should come next
 //				}
 //			}
-//
+
 //			for (var x = 0; x < tiles2D.GetLength(0); x++)
 //			{
 //				for (var y = 0; y < tiles2D.GetLength(1); y++)
@@ -62,7 +77,7 @@ namespace PrototypeRPG.Traits
 //
 //				}
 //			}
-//		}
+		}
 
 		// TODO: Create from int[] where each index is a tileType
 		public void CreateMapTiles()
