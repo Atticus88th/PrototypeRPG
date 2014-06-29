@@ -8,5 +8,9 @@ namespace PrototypeRPG.Traits
 	public interface ITick { void Tick(Actor self); };
 	public interface ITickRender { void TickRender(Actor self, Rectangle destRect, Rectangle sourceRect, SpriteBatch spriteBatch); };
 
-	public interface IMouseSelectable { void OnSelect(Actor self); }
+	public interface IMouseInteraction
+	{
+		void OnLeftClick(Actor self);
+		void OnRightClick(Actor self);
+	}
 }

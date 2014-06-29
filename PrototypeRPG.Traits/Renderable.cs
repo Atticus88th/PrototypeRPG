@@ -8,21 +8,17 @@ namespace PrototypeRPG.Traits
 	public class Renderable : ITrait, ITickRender
 	{
 		public Rectangle Boundingbox;
+		public Rectangle SourceRect;
 		public Texture2D Texture { get; private set; }
 
-		Rectangle destRect;
-		Rectangle sourceRect;
-
-		public Renderable(Texture2D texture, Rectangle destRect, Rectangle sourceRect)
+		public Renderable(Texture2D texture, Rectangle boundingBox, Rectangle sourceRect)
 		{
 			Texture = texture;
-
-			this.destRect = destRect;
-			this.sourceRect = sourceRect;
+			SourceRect = sourceRect;
 
 			// This is set to the bounds relative to the Window's 0,0
 			// TODO: Set this to current location + bounds
-			Boundingbox = destRect;
+			Boundingbox = boundingBox;
 		}
 
 		public void UpdateBoundingBox(int x, int y)

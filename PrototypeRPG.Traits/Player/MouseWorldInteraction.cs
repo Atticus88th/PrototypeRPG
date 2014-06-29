@@ -8,10 +8,11 @@ namespace PrototypeRPG.Traits
 	{
 		MouseState oldState;
 		MouseState currentState;
-		Point mousePosition { get { return new Point(currentState.X, currentState.Y); } }
+		Point position { get { return new Point(currentState.X, currentState.Y); } }
 
-		bool leftButton { get { return currentState.LeftButton == ButtonState.Pressed; } }
-		bool rightButton { get { return currentState.RightButton == ButtonState.Pressed; } }
+		bool leftClick { get { return currentState.LeftButton == ButtonState.Pressed; } }
+		bool rightClick { get { return currentState.RightButton == ButtonState.Pressed; } }
+		bool newState { get { return currentState != oldState; } }
 
 		public MouseWorldInteraction() { }
 
@@ -19,11 +20,28 @@ namespace PrototypeRPG.Traits
 		{
 			currentState = Mouse.GetState();
 
-			var actorAtMouse = self.World.GetActorAtLocation(mousePosition);
+			if (!newState)
+				return;
 
-			if (leftButton && actorAtMouse != null)
-				foreach (var notify in actorAtMouse.TraitsImplementing<IMouseSelectable>())
-					notify.OnSelect(actorAtMouse);
+			var clicked = self.World.GetActorAtLocation(position);
+
+			if (leftClick)
+			{
+				if (clicked == null)
+					return;
+
+				foreach (var notify in clicked.TraitsImplementing<IMouseInteraction>())
+					notify.OnLeftClick(clicked);
+			}
+
+			if (rightClick)
+			{
+				if (clicked == null)
+					return;
+
+				foreach (var notify in clicked.TraitsImplementing<IMouseInteraction>())
+					notify.OnRightClick(clicked);
+			}
 
 			oldState = currentState;
 		}

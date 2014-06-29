@@ -44,16 +44,16 @@ namespace PrototypeRPG.Traits
 				return;
 
 			if (keys.Contains(Up))
-				DoVisualMovement(self, new Vector2(0, -5));
+				DoVisualMovement(self, new Vector2(0, -4));
 
 			if (keys.Contains(Down))
-				DoVisualMovement(self, new Vector2(0, 5));
+				DoVisualMovement(self, new Vector2(0, 4));
 
 			if (keys.Contains(Left))
-				DoVisualMovement(self, new Vector2(-5, 0));
+				DoVisualMovement(self, new Vector2(-4, 0));
 
 			if (keys.Contains(Right))
-				DoVisualMovement(self, new Vector2(5, 0));
+				DoVisualMovement(self, new Vector2(4, 0));
 
 			oldState = currentState;
 		}

@@ -22,7 +22,6 @@ namespace PrototypeRPG.Traits
 
 		readonly ContentManager content;
 		readonly GraphicsDevice graphics;
-		readonly Texture2D worldTileSheet;
 		Random random = new Random();
 		Map map;
 
@@ -79,7 +78,7 @@ namespace PrototypeRPG.Traits
 
 				foreach (var trait in actor.TraitsImplementing<ITickRender>())
 				{
-					var sourceRect = GetSourceRectangle(render.Texture, 0, 16, 24, 0);
+					var sourceRect = render.SourceRect;
 					var destRect = new Rectangle((int)position.Position.X, (int)position.Position.Y, sourceRect.Width, sourceRect.Height);
 					trait.TickRender(actor, destRect, sourceRect, SpriteBatch);
 				}
@@ -118,9 +117,8 @@ namespace PrototypeRPG.Traits
 			var paddedSpriteW = spriteWidth + spriteBorder;
 			var paddedSpriteH = spriteHeight + spriteBorder;
 			var spritesPerRow = texture.Width / paddedSpriteW;
-			var spritesPerColumn = texture.Height / paddedSpriteH;
 			var x = paddedSpriteW * (spriteIndex % spritesPerRow);
-			var y = paddedSpriteH * (spriteIndex % spritesPerColumn);
+			var y = paddedSpriteH * (spriteIndex / spritesPerRow);
 
 			return new Rectangle(x, y, spriteWidth, spriteHeight);
 		}
@@ -140,10 +138,9 @@ namespace PrototypeRPG.Traits
 
 			var texture = content.Load<Texture2D>("link");
 
-			// BUG: sprite index picking doesn't work
-			var sourceRect = GetSourceRectangle(texture, 20, 16, 24, 0);
-			var destRect = new Rectangle((int)position.Position.X, (int)position.Position.Y, sourceRect.Width, sourceRect.Height);
-			var renderable = new Renderable(texture, destRect, sourceRect);
+			var sourceRect = GetSourceRectangle(texture, 0, 16, 24, 0);
+			var bounding = new Rectangle((int)position.Position.X, (int)position.Position.Y, sourceRect.Width, sourceRect.Height);
+			var renderable = new Renderable(texture, bounding, sourceRect);
 
 			var keyMove = new KeyboardMovement();
 
@@ -151,6 +148,30 @@ namespace PrototypeRPG.Traits
 			newActor.AddTrait(position);
 			newActor.AddTrait(renderable);
 			newActor.AddTrait(keyMove);
+
+			return newActor;
+		}
+
+		public Actor CreateActorSpriteIndex(int index)
+		{
+			var newActor = new Actor();
+			newActor.World = this;
+			newActor.Owner = HumanPlayer;
+
+			var health = new Health(100);
+
+			var position = new Positionable(newActor);
+			position.Position = new Vector2(index * 16, 0);
+
+			var texture = content.Load<Texture2D>("link");
+
+			var sourceRect = GetSourceRectangle(texture, index, 16, 24, 0);
+			var bounding = new Rectangle((int)position.Position.X, (int)position.Position.Y, sourceRect.Width, sourceRect.Height);
+			var renderable = new Renderable(texture, bounding, sourceRect);
+
+			newActor.AddTrait(health);
+			newActor.AddTrait(position);
+			newActor.AddTrait(renderable);
 
 			return newActor;
 		}
@@ -172,7 +193,8 @@ namespace PrototypeRPG.Traits
 
 			Actors.Add(pa);
 
-			Actors.Add(CreateTestActor());
+			for (var i = 0; i < 32; i++)
+				Actors.Add(CreateActorSpriteIndex(i));
 
 			map.CreateMapTiles();
 		}
