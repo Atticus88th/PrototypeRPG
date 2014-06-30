@@ -2,10 +2,14 @@
 
 A template for RPG games that I hope to extend.
 
+---
+
 ## Dependencies
 
-1. Monogame for Mac (including MonoMac)
-2. Patience
+1. MonoGame for Xamarin Studio (for Mac project)
+2. MonoGame for Visual Studio (for Windows project)
+
+---
 
 ## Contributing
 
@@ -13,11 +17,23 @@ A template for RPG games that I hope to extend.
 2. Hack away
 3. Submit a pull request
 
+I usually spend my idle hours at `#openra` on `irc.freenode.net`, feel free to contact me.
+
+---
+
 ## Help Needed
 
-Unfortunately with Monogame you have to create and build from a specific project for each platform.
+Unfortunately with MonoGame you have to create and build from a specific project for each platform.
 
-I would greatly appreciate any help to make this available for Windows and Linux.
+I would greatly appreciate any help to make this available for Linux.
+
+#### Next TODOs:
+
+1. Seamless sprite animation
+2. Basic collision
+
+---
+
 
 ## License
 
