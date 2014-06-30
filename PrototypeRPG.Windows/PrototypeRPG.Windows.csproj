@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{EF048D98-1301-4A40-A1A1-3375DE5F58EB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -53,11 +51,8 @@
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\PrototypeRPG.Traits\PrototypeRPG.Traits.csproj">
-      <Project>{a2ae5e2b-744f-4894-84d0-79bd6bca4386}</Project>
+      <Project>{A2AE5E2B-744F-4894-84D0-79BD6BCA4386}</Project>
       <Name>PrototypeRPG.Traits</Name>
     </ProjectReference>
   </ItemGroup>

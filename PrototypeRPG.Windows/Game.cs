@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PrototypeRPG.Traits;
@@ -19,7 +18,6 @@ namespace PrototypeRPG.Windows
 		{
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "../../../../Assets";
-			Debug.WriteLine(Path.GetFullPath(Content.RootDirectory));
 			IsMouseVisible = true;
 			graphics.IsFullScreen = false;
 
@@ -31,8 +29,6 @@ namespace PrototypeRPG.Windows
 		protected override void Initialize()
 		{
 			base.Initialize();
-//            graphics.PreferredBackBufferHeight = windowSize;
-//            graphics.PreferredBackBufferWidth = windowSize;
 		}
 
 		protected override void LoadContent()
