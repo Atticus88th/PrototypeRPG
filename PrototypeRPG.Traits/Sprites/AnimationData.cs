@@ -8,17 +8,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PrototypeRPG.Traits
 {
-    public struct AnimationData
-    {
-        public int AnimationRowCount;
-        public int MaxFrameCount;
-        public Texture2D Texture;
-        public Color SpriteColor;
-        public float Scale;
-        public bool IsAnimated;
-        public bool LoopAnimation;
-        public string[] AnimationReference;
-        public Dictionary<string, int> AnimationFrameCount;
-        public Dictionary<string, int> AnimationFPS;
-    }
+	public struct AnimationData
+	{
+		public int AnimationRowCount;
+		public int MaxFrameCount;
+		public Texture2D Texture;
+		public Color SpriteColor;
+		public float Scale;
+		public bool IsAnimated;
+		public bool LoopAnimation;
+		public string[] AnimationReference;
+		public Dictionary<string, int> AnimationFrameCount;
+		public Dictionary<string, int> AnimationFPS;
+	}
 }

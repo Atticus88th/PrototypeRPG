@@ -86,7 +86,7 @@ namespace PrototypeRPG.Traits
 					trait.TickRender(actor, SpriteBatch, gameTime);
 			}
 		}
-	
+
 		public Actor CreateActor()
 		{
 			var newActor = new Actor();
@@ -143,23 +143,23 @@ namespace PrototypeRPG.Traits
 			var sourceRect = GetSourceRectangle(texture, 0, 16, 24, 0);
 			var bounding = new Rectangle((int)position.Position.X, (int)position.Position.Y, sourceRect.Width, sourceRect.Height);
 
-            var animationReference = new string[] {"left","up","right","down"};
-            var animationFrameCount = new Dictionary<string, int> { { "left", 8 }, { "up", 8 }, { "right", 8 }, { "down", 8 } };
+			var animationReference = new string[] { "left", "up", "right", "down" };
+			var animationFrameCount = new Dictionary<string, int> { { "left", 8 }, { "up", 8 }, { "right", 8 }, { "down", 8 } };
 
-            var animationFPS = new Dictionary<string, int> { { "left", 5 }, { "up", 5 }, { "right", 5 }, { "down", 5 } };
-            var animationData = new AnimationData
-            {
-                AnimationRowCount = 4,
-                IsAnimated = true,
-                LoopAnimation = true,
-                MaxFrameCount = 8,
-                Scale = 1f,
-                SpriteColor = Color.White,
-                Texture = texture,
-                AnimationReference = animationReference,
-                AnimationFrameCount = animationFrameCount,
-                AnimationFPS = animationFPS
-            };
+			var animationFPS = new Dictionary<string, int> { { "left", 5 }, { "up", 5 }, { "right", 5 }, { "down", 5 } };
+			var animationData = new AnimationData
+			{
+				AnimationRowCount = 4,
+				IsAnimated = true,
+				LoopAnimation = true,
+				MaxFrameCount = 8,
+				Scale = 1f,
+				SpriteColor = Color.White,
+				Texture = texture,
+				AnimationReference = animationReference,
+				AnimationFrameCount = animationFrameCount,
+				AnimationFPS = animationFPS
+			};
 
 			var renderable = new Renderable(animationData);
 			var keyMove = new KeyboardMovement(4);
@@ -187,11 +187,11 @@ namespace PrototypeRPG.Traits
 			pa.AddTrait(keyInput);
 			pa.AddTrait(mouseInput);
 
-            Actors.Add(pa);
+			Actors.Add(pa);
 
 			Map.CreateMapTiles();
-//			Map.LoadTilesFromFile(Path.Combine(content.RootDirectory, "map.txt"));
-//			Map.LoadTilesFromArrays();
+			//			Map.LoadTilesFromFile(Path.Combine(content.RootDirectory, "map.txt"));
+			//			Map.LoadTilesFromArrays();
 		}
 	}
 }
