@@ -8,37 +8,46 @@ namespace PrototypeRPG.Traits
 	public class Renderable : ITrait, ITickRender
 	{
 		public Rectangle Boundingbox;
-		public Rectangle SourceRect;
-		public Texture2D Texture { get; private set; }
 
-		public Renderable(Texture2D texture, Rectangle boundingBox, Rectangle sourceRect)
+        public Sprite Sprite { get; private set; }
+
+		public Renderable(AnimationData animationData)
 		{
-			Texture = texture;
-			SourceRect = sourceRect;
+            Sprite = new Sprite(animationData.Texture, animationData.MaxFrameCount, animationData.AnimationRowCount);
+            if(animationData.IsAnimated)
+            {
+                for(int i = 0; i < animationData.AnimationRowCount; i++)
+                    Sprite.AddAnimation(animationData.AnimationReference[i], i + 1, animationData.AnimationFrameCount[animationData.AnimationReference[i]], animationData.AnimationFPS[animationData.AnimationReference[i]]);
+
+                Sprite.Loop = animationData.LoopAnimation;
+                // TODO: Automatically set character to an idle position
+                Sprite.SetAnimation("left");
+            }
+
 
 			// This is set to the bounds relative to the Window's 0,0
 			// TODO: Set this to current location + bounds
-			Boundingbox = boundingBox;
 		}
 
-		public void UpdateBoundingBox(int x, int y)
-		{
-			Boundingbox = new Rectangle(x, y, Boundingbox.Width, Boundingbox.Height);
-		}
+        public void UpdateBoundingBox(int x, int y)
+        {
+            Boundingbox = Sprite.UpdateBounds();
+        }
 
-		public void TickRender(Actor self, Rectangle destRect, Rectangle sourceRect, SpriteBatch spriteBatch)
+		public void TickRender(Actor self, SpriteBatch spriteBatch, GameTime gameTime)
 		{
 			if (self.IsDead)
 				return;
 
-			if (Texture == null)
-				throw new ArgumentNullException("No texture provided for Actor{0} to render!".F(self.ActorID));
+            if (Sprite == null)
+				throw new ArgumentNullException("No sprite provided for Actor{0} to render!".F(self.ActorID));
 
 			var position = self.TraitOrDefault<Positionable>();
 			if (position == null)
 				throw new ArgumentNullException("No position trait for Actor{0}!".F(self.ActorID));
 
-			spriteBatch.Draw(Texture, destRect, sourceRect, Color.White);
+            Sprite.Position = position.Position;
+            Sprite.Draw(spriteBatch, 1f, gameTime);
 		}
 	}
 }

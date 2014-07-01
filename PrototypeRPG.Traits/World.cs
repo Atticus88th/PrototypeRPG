@@ -66,7 +66,7 @@ namespace PrototypeRPG.Traits
 					trait.Tick(actor);
 		}
 
-		public void TickRender()
+		public void TickRender(GameTime gameTime)
 		{
 			TickRenderCount++;
 
@@ -83,11 +83,7 @@ namespace PrototypeRPG.Traits
 					continue;
 
 				foreach (var trait in actor.TraitsImplementing<ITickRender>())
-				{
-					var sourceRect = render.SourceRect;
-					var destRect = new Rectangle((int)position.Position.X, (int)position.Position.Y, sourceRect.Width, sourceRect.Height);
-					trait.TickRender(actor, destRect, sourceRect, SpriteBatch);
-				}
+					trait.TickRender(actor, SpriteBatch, gameTime);
 			}
 		}
 	
@@ -146,33 +142,26 @@ namespace PrototypeRPG.Traits
 
 			var sourceRect = GetSourceRectangle(texture, 0, 16, 24, 0);
 			var bounding = new Rectangle((int)position.Position.X, (int)position.Position.Y, sourceRect.Width, sourceRect.Height);
-			var renderable = new Renderable(texture, bounding, sourceRect);
-			var keyMove = new KeyboardMovement(4);
 
-			newActor.AddTrait(health);
-			newActor.AddTrait(position);
-			newActor.AddTrait(renderable);
-			newActor.AddTrait(keyMove);
+            var animationReference = new string[] {"left","up","right","down"};
+            var animationFrameCount = new Dictionary<string, int> { { "left", 8 }, { "up", 8 }, { "right", 8 }, { "down", 8 } };
 
-			return newActor;
-		}
+            var animationFPS = new Dictionary<string, int> { { "left", 5 }, { "up", 5 }, { "right", 5 }, { "down", 5 } };
+            var animationData = new AnimationData
+            {
+                AnimationRowCount = 4,
+                IsAnimated = true,
+                LoopAnimation = true,
+                MaxFrameCount = 8,
+                Scale = 1f,
+                SpriteColor = Color.White,
+                Texture = texture,
+                AnimationReference = animationReference,
+                AnimationFrameCount = animationFrameCount,
+                AnimationFPS = animationFPS
+            };
 
-		public Actor CreateActorSpriteIndex(int index)
-		{
-			var newActor = new Actor();
-			newActor.World = this;
-			newActor.Owner = HumanPlayer;
-
-			var health = new Health(100);
-
-			var position = new Positionable(newActor);
-			position.Position = new Vector2(index * 16, 0);
-
-			var texture = content.Load<Texture2D>("link");
-
-			var sourceRect = GetSourceRectangle(texture, index, 16, 24, 0);
-			var bounding = new Rectangle((int)position.Position.X, (int)position.Position.Y, sourceRect.Width, sourceRect.Height);
-			var renderable = new Renderable(texture, bounding, sourceRect);
+			var renderable = new Renderable(animationData);
 			var keyMove = new KeyboardMovement(4);
 
 			newActor.AddTrait(health);
@@ -198,10 +187,7 @@ namespace PrototypeRPG.Traits
 			pa.AddTrait(keyInput);
 			pa.AddTrait(mouseInput);
 
-			Actors.Add(pa);
-
-			for (var i = 0; i < 32; i++)
-				Actors.Add(CreateActorSpriteIndex(i));
+            Actors.Add(pa);
 
 			Map.CreateMapTiles();
 //			Map.LoadTilesFromFile(Path.Combine(content.RootDirectory, "map.txt"));

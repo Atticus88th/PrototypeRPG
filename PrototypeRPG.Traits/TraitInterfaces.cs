@@ -6,7 +6,7 @@ namespace PrototypeRPG.Traits
 {
 	public interface ITrait { };
 	public interface ITick { void Tick(Actor self); };
-	public interface ITickRender { void TickRender(Actor self, Rectangle destRect, Rectangle sourceRect, SpriteBatch spriteBatch); };
+	public interface ITickRender { void TickRender(Actor self, SpriteBatch spriteBatch, GameTime gameTime); };
 
 	public interface IMouseInteraction
 	{
