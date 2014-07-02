@@ -14,10 +14,11 @@ namespace PrototypeRPG.Traits
 		float timeElapsed;
 		float timeToUpdate = 0.05f;
 		Texture2D texture;
+		Actor self;
 		#endregion
 
 		#region "Animation Vars"
-		Dictionary<string, Rectangle[]> spriteAnimations = new Dictionary<string, Rectangle[]>();
+		Dictionary<string, Rectangle[]> spriteAnimationRects = new Dictionary<string, Rectangle[]>();
 		Dictionary<string, int> spriteFramesCount = new Dictionary<string, int>();
 		Dictionary<string, int> spriteFPS = new Dictionary<string, int>();
 		int animationFrames;
@@ -45,8 +46,12 @@ namespace PrototypeRPG.Traits
 		}
 		#endregion
 
-		public Sprite(Texture2D spriteTexture, int maxFrameCount, int animationCount)
+
+		public Sprite(Actor self, Texture2D spriteTexture, int maxFrameCount, int animationCount)
 		{
+			this.self = self;
+			isAnimation = animationFrames > 1;
+
 			texture = spriteTexture;
 			animationFrames = maxFrameCount;
 			AnimationWidth = texture.Width / maxFrameCount;
@@ -69,7 +74,7 @@ namespace PrototypeRPG.Traits
 			if (!isAnimation)
 				isAnimation = true;
 
-			if (spriteAnimations.ContainsKey(animationID))
+			if (spriteAnimationRects.ContainsKey(animationID))
 				return;
 
 			var rectangles = new Rectangle[frameCount];
@@ -77,14 +82,14 @@ namespace PrototypeRPG.Traits
 			for (int i = 0; i < frameCount; i++)
 				rectangles[i] = new Rectangle(i * AnimationWidth, (animationRow - 1) * AnimationHeight, AnimationWidth, AnimationHeight);
 
-			spriteAnimations.Add(animationID, rectangles);
+			spriteAnimationRects.Add(animationID, rectangles);
 			spriteFramesCount.Add(animationID, frameCount);
 			spriteFPS.Add(animationID, animationFPS);
 		}
 
 		public bool SetAnimation(string animationID)
 		{
-			if (!spriteAnimations.ContainsKey(animationID))
+			if (!spriteAnimationRects.ContainsKey(animationID) || CurrentAnimation == animationID)
 				return false;
 
 			CurrentAnimation = animationID;
@@ -121,13 +126,15 @@ namespace PrototypeRPG.Traits
 					}
 				}
 
-				if (FrameIndex > (spriteAnimations[CurrentAnimation].Length - 1) && texture != null)
-					spriteBatch.Draw(texture, Position, spriteAnimations[CurrentAnimation][0], alphaMixer, Rotation, Origin, Scale, Effects, 0f);
+				if (FrameIndex > (spriteAnimationRects[CurrentAnimation].Length - 1) && texture != null)
+					spriteBatch.Draw(texture, Position, spriteAnimationRects[CurrentAnimation][0], alphaMixer, Rotation, Origin, Scale, Effects, 0f);
 				else
-					spriteBatch.Draw(texture, Position, spriteAnimations[CurrentAnimation][FrameIndex], alphaMixer, Rotation, Origin, Scale, Effects, 0f);
+					spriteBatch.Draw(texture, Position, spriteAnimationRects[CurrentAnimation][FrameIndex], alphaMixer, Rotation, Origin, Scale, Effects, 0f);
 			}
 			else if (texture != null)
 				spriteBatch.Draw(texture, Position, null, alphaMixer, Rotation, Origin, Scale, Effects, 0f);
+			else
+				throw new NullReferenceException("Texture for Sprite is null! [Actor{0}]".F(self.ActorID));
 		}
 	}
 }

@@ -1,6 +1,6 @@
 # PrototypeRPG
 
-A template for RPG games that I hope to extend.
+A template for 2D RPG games that I hope to extend.
 
 ---
 
@@ -17,7 +17,10 @@ A template for RPG games that I hope to extend.
 2. Hack away
 3. Submit a pull request
 
-I usually spend my idle hours at `#openra` on `irc.freenode.net`, feel free to contact me.
+---
+## Current State
+
+![Sprite animation!](http://i.imgur.com/VwabtbC.gif)
 
 ---
 
@@ -29,8 +32,15 @@ I would greatly appreciate any help to make this available for Linux.
 
 #### Next TODOs:
 
-1. Seamless sprite animation
-2. Basic collision
+1. Basic collision
+
+---
+
+## Contacting Me
+
+If you want to chat hop on to IRC at `#PhrohdohRPG` (if I'm not there try `#openra`) on `irc.freenode.net`!
+
+Shoot me an email `Phrohdoh@gmail.com` but know that I rarely remember to check my email.
 
 ---
 

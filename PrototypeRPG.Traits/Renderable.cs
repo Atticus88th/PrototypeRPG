@@ -11,22 +11,31 @@ namespace PrototypeRPG.Traits
 
 		public Sprite Sprite { get; private set; }
 
-		public Renderable(AnimationData animationData)
-		{
-			Sprite = new Sprite(animationData.Texture, animationData.MaxFrameCount, animationData.AnimationRowCount);
-			if (animationData.IsAnimated)
-			{
-				for (int i = 0; i < animationData.AnimationRowCount; i++)
-					Sprite.AddAnimation(animationData.AnimationReference[i], i + 1, animationData.AnimationFrameCount[animationData.AnimationReference[i]], animationData.AnimationFPS[animationData.AnimationReference[i]]);
+		Actor self;
 
-				Sprite.Loop = animationData.LoopAnimation;
+		public Renderable(Actor self, AnimationData animData)
+		{
+			this.self = self;
+
+			Sprite = new Sprite(self, animData.Texture, animData.MaxFrameCount, animData.AnimationRowCount);
+
+			if (animData.IsAnimated)
+			{
+				for (int i = 0; i < animData.AnimationRowCount; i++)
+				{
+					var animId = animData.AnimationReference[i];
+					var animRow = i + 1;
+					var animFrameCount = animData.AnimationFrameCount[animData.AnimationReference[i]];
+					var animFPS = animData.AnimationFPS[animId];
+
+					Sprite.AddAnimation(animId, animRow, animFrameCount, animFPS);
+				}
+
+				Sprite.Loop = animData.LoopAnimation;
+
 				// TODO: Automatically set character to an idle position
 				Sprite.SetAnimation("left");
 			}
-
-
-			// This is set to the bounds relative to the Window's 0,0
-			// TODO: Set this to current location + bounds
 		}
 
 		public void UpdateBoundingBox(int x, int y)

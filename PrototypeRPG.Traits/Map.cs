@@ -55,31 +55,6 @@ namespace PrototypeRPG.Traits
 					tiles2D[aX, aY] = new Tile(loaded[aY][aX]);
 		}
 
-		public void LoadTilesFromFile(string filename)
-		{
-			var fullText = File.ReadAllLines(filename);
-
-//			foreach (var fullLine in fullText)
-//			{
-//				var lineAsIntArray = fullLine.ToIntArray(',');
-//				for (var intIndex = 0; intIndex < lineAsIntArray.Length; intIndex++)
-//				{
-//					Console.WriteLine(lineAsIntArray[intIndex]);
-//
-//					// No idea what should come next
-//				}
-//			}
-
-//			for (var x = 0; x < tiles2D.GetLength(0); x++)
-//			{
-//				for (var y = 0; y < tiles2D.GetLength(1); y++)
-//				{
-//
-//				}
-//			}
-		}
-
-		// TODO: Create from int[] where each index is a tileType
 		public void CreateMapTiles()
 		{
 			var destRect = new Rectangle();

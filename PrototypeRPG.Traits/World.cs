@@ -22,7 +22,7 @@ namespace PrototypeRPG.Traits
 		public int TickRenderCount { get; private set; }
 
 		// Be careful with this, it shouldn't exist til after everything here is done
-		public Map Map;
+		public Map Map { get; private set; }
 
 		readonly ContentManager content;
 		readonly GraphicsDevice graphics;
@@ -36,10 +36,11 @@ namespace PrototypeRPG.Traits
 			this.content = content;
 			this.graphics = gdm.GraphicsDevice;
 
-			Map = new Map(this, 40, 16);
+			Map = new Map(this, 8, 16);
 			Map.MapTileset = content.Load<Texture2D>("lttp");
 
 			windowSize = Map.TilesInMapSquare * Map.TileSize;
+			Console.WriteLine(windowSize);
 
 			gdm.PreferredBackBufferHeight = windowSize;
 			gdm.PreferredBackBufferWidth = windowSize;
@@ -143,6 +144,7 @@ namespace PrototypeRPG.Traits
 			var sourceRect = GetSourceRectangle(texture, 0, 16, 24, 0);
 			var bounding = new Rectangle((int)position.Position.X, (int)position.Position.Y, sourceRect.Width, sourceRect.Height);
 
+			// TODO: Un-hardcode all of these animations
 			var animationReference = new string[] { "left", "up", "right", "down" };
 			var animationFrameCount = new Dictionary<string, int> { { "left", 8 }, { "up", 8 }, { "right", 8 }, { "down", 8 } };
 
@@ -161,8 +163,8 @@ namespace PrototypeRPG.Traits
 				AnimationFPS = animationFPS
 			};
 
-			var renderable = new Renderable(animationData);
-			var keyMove = new KeyboardMovement(4);
+			var renderable = new Renderable(newActor, animationData);
+			var keyMove = new KeyboardMovement(2);
 
 			newActor.AddTrait(health);
 			newActor.AddTrait(position);
@@ -189,9 +191,13 @@ namespace PrototypeRPG.Traits
 
 			Actors.Add(pa);
 
-			Map.CreateMapTiles();
-			//			Map.LoadTilesFromFile(Path.Combine(content.RootDirectory, "map.txt"));
-			//			Map.LoadTilesFromArrays();
+//			Map.CreateMapTiles();
+//			Map.LoadTilesFromFile(Path.Combine(content.RootDirectory, "map.txt"));
+			Map.LoadTilesFromArrays();
+
+			// Temporary; create initial character
+			//	TODO: This is horrible altogether, this should add to world.Actors also
+			Actors.Add(CreateTestActor());
 		}
 	}
 }

@@ -35,6 +35,16 @@ namespace PrototypeRPG.Traits
 				position.Position += vector2;
 		}
 
+		void UpdateSprite(Actor self, string animID)
+		{
+			// TODO: Need a way to guarantee traits
+			var r = self.TraitOrDefault<Renderable>();
+			if (r == null)
+				throw new NullReferenceException("No Renderable for Actor{0}".F(self.ActorID));
+
+			r.Sprite.SetAnimation(animID);
+		}
+
 		public void Tick(Actor self)
 		{
 			var keys = PollForInput();
@@ -42,16 +52,28 @@ namespace PrototypeRPG.Traits
 				return;
 
 			if (keys.Contains(Up))
+			{
 				DoVisualMovement(self, new Vector2(0, -MovementSpeed));
+				UpdateSprite(self, "up");
+			}
 
 			if (keys.Contains(Down))
+			{
 				DoVisualMovement(self, new Vector2(0, MovementSpeed));
+				UpdateSprite(self, "down");
+			}
 
 			if (keys.Contains(Left))
+			{
 				DoVisualMovement(self, new Vector2(-MovementSpeed, 0));
+				UpdateSprite(self, "left");
+			}
 
 			if (keys.Contains(Right))
+			{
 				DoVisualMovement(self, new Vector2(MovementSpeed, 0));
+				UpdateSprite(self, "right");
+			}
 
 			oldState = currentState;
 		}

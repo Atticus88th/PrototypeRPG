@@ -49,7 +49,7 @@ namespace PrototypeRPG
 			graphics.GraphicsDevice.Clear(Color.Green);
 			spriteBatch.Begin();
 
-			world.TickRender();
+			world.TickRender(gameTime);
 
 			spriteBatch.End();
 			base.Draw(gameTime);
