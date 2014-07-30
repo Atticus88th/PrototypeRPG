@@ -20,19 +20,12 @@ A template for 2D RPG games that I hope to extend.
 ---
 ## Current State
 
-![Sprite animation!](http://i.imgur.com/VwabtbC.gif)
+In the process of being moved to SDL2.
 
 ---
 
 ## Help Needed
-
-Unfortunately with MonoGame you have to create and build from a specific project for each platform.
-
-I would greatly appreciate any help to make this available for Linux.
-
-#### Next TODOs:
-
-1. Basic collision
+Getting [this project](https://github.com/Phrohdoh/sdl2cs-template) to work with SDL_image (initally for OS X then for Linux/Windows).
 
 ---
 
